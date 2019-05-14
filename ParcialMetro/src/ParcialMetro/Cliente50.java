@@ -69,7 +69,7 @@ class Cliente50{
         //int hI_seg = timeStringToSegundos(hora[0]);
         //int hF_seg = timeStringToSegundos(hora[1]);
         //String csvFile = "04_05_2018.csv";
-        String csvFile = "src\\data\\data_prueba.csv";
+        String csvFile = "src\\data\\04_05_2018.csv";
         //String line = "";
         String SplitBy = ";";
         
@@ -77,7 +77,8 @@ class Cliente50{
         ArrayList<Data_struct> dataList=readFile(csvFile,SplitBy,hora[0],hora[1]);
         
         int tam_paraderos = paraderos_sort.length;
-        int[][] matrix = new int[tam_paraderos][tam_paraderos];
+        //int[][] matrix = new int[tam_paraderos][tam_paraderos];
+        int[][] matrix = initMatrix(dataList);
         printMatrix(matrix);
         
         //System.out.println("Primer elemento de dataList -> Hora:"+dataList.get(2).getTiempo_str() +"  pI: "+dataList.get(2).getParada_I()+"  pF: "+dataList.get(2).getParada_F());
@@ -123,7 +124,10 @@ class Cliente50{
                 if(tt>h_seg_inicial && tt<=h_seg_final && (perteneceA(data[3],paraderos_excluidos)==false && perteneceA(data[4],paraderos_excluidos)==false))
                     dataList.add(new Data_struct(data[1],data[3],data[4]));
                 
-                printDataList(dataList);
+                
+                
+                
+                //printDataList(dataList);
 
             }
 
@@ -207,11 +211,25 @@ class Cliente50{
         
         public void printMatrix(int[][] m ){
             int dim = paraderos_sort.length;
+            /*
+            System.out.print(""+fixedLengthString("-",18));
+            System.out.print("\t");
+            for(int i=0; i<dim;i++){
+                
+                System.out.print(""+fixedLengthString(paraderos_sort[i],18));
+            }
+            */
+                    
             for(int i=0; i<dim; i++){
+                System.out.print(""+fixedLengthString(paraderos_sort[i],16)+"\t");
                 for(int j=0; j<dim;j++){
                     System.out.print(""+m[i][j]+(j==dim-1?("\n"):("\t")));
                 }
             }
         }
+        
+    public static String fixedLengthString(String string, int length) {
+       return String.format("%1$"+length+ "s", string);
+    }
 
 }
