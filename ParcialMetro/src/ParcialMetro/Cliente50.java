@@ -22,9 +22,14 @@ import java.util.*;
 class Cliente50{
     TCPClient50 mTcpClient;
     Scanner sc;
+    
+    private static final String[] paraderos_sort = new String[] {"Naranjal","Izaguirre","Pacifico","Independencia","Los jazmines","Tomas Valle","El Milagro","Honorio Delgado","Uni","Parque del Trabajo","Caqueta","2 de Mayo","Quilca","España","Estacion Central","Estadio Nacional","México","Canadá","Javier Prado","Canaval y Moreyra","Aramburu","Domingo Orué","Angamos","Ricardo Palma","Benavides","28 de Julio","Plaza de Flores","Balta","Bulevar","Union","Escuela Militar","Terán","Rosario de Villa","Matellini"};
+    private static final String[] paraderos_excluidos = new String[] {"Ramon Castilla","Tacna","Jiron de la Unión","Colmena"};
+            
     public static void main(String[] args)  {
         Cliente50 objcli = new Cliente50();
         objcli.iniciar();
+        
     }
     void iniciar(){
        new Thread(
@@ -61,8 +66,8 @@ class Cliente50{
         
         Data_struct temp = new Data_struct();
         String[] hora = llego.split("-");
-        int hI_seg = timeStringToSegundos(hora[0]);
-        int hF_seg = timeStringToSegundos(hora[1]);
+        //int hI_seg = timeStringToSegundos(hora[0]);
+        //int hF_seg = timeStringToSegundos(hora[1]);
         //String csvFile = "04_05_2018.csv";
         String csvFile = "src\\data\\data_prueba.csv";
         //String line = "";
@@ -70,6 +75,10 @@ class Cliente50{
         
         //if(timeStringToSegundos(data))
         ArrayList<Data_struct> dataList=readFile(csvFile,SplitBy,hora[0],hora[1]);
+        
+        int tam_paraderos = paraderos_sort.length;
+        int[][] matrix = new int[tam_paraderos][tam_paraderos];
+        printMatrix(matrix);
         
         //System.out.println("Primer elemento de dataList -> Hora:"+dataList.get(2).getTiempo_str() +"  pI: "+dataList.get(2).getParada_I()+"  pF: "+dataList.get(2).getParada_F());
         
@@ -111,7 +120,7 @@ class Cliente50{
                 int tt = timeStringToSegundos(data[1]);
                 
                 //filtramos los datos que le corresponden
-                if(tt>h_seg_inicial && tt<=h_seg_final)
+                if(tt>h_seg_inicial && tt<=h_seg_final && (perteneceA(data[3],paraderos_excluidos)==false && perteneceA(data[4],paraderos_excluidos)==false))
                     dataList.add(new Data_struct(data[1],data[3],data[4]));
                 
                 printDataList(dataList);
@@ -158,6 +167,51 @@ class Cliente50{
             data.stream().forEach((item) -> {
                 System.out.println(""+item.getTiempo_str()+"\t"+item.getParada_I()+"\t"+item.getParada_F());
         });
+        }
+        
+        public boolean perteneceA(String e,String[] list){
+            boolean r=false;
+            
+            for (String list1 : list) {
+                if (list1.equals(e)) {
+                    return true;
+                }
+            }
+            
+            return r;
+        }
+        public int indexParadero(String e,String[] list){
+            int index=-1;
+            
+            for (int i=0; i<list.length;i++) {
+                if (e.equals(list[i])){
+                    return i;
+                }
+            }
+            
+            return index;
+        }
+        
+        public int[][] initMatrix(ArrayList<Data_struct> data){
+            int dim = paraderos_sort.length;
+            int [][] r = new int[dim][dim];
+            
+            for (Data_struct e : data) {
+                r[indexParadero(e.parada_I,paraderos_sort)][indexParadero(e.parada_F,paraderos_sort)]++;
+            }
+            
+            return r;
+        }
+        
+        
+        
+        public void printMatrix(int[][] m ){
+            int dim = paraderos_sort.length;
+            for(int i=0; i<dim; i++){
+                for(int j=0; j<dim;j++){
+                    System.out.print(""+m[i][j]+(j==dim-1?("\n"):("\t")));
+                }
+            }
         }
 
 }
