@@ -106,13 +106,15 @@ class Cliente50{
                 String[] data = line.split(cvsSplitBy);
 
                 //System.out.println("Country [code= " + data[4] + " , name=" + data[5] + "]");
-                System.out.println("hora-> " + data[1] + " , parada=" + data[3] + "->"+"parada_F="+data[4]);
+                //System.out.println("hora-> " + data[1] + " , parada=" + data[3] + "->"+"parada_F="+data[4]);
                 
                 int tt = timeStringToSegundos(data[1]);
                 
                 //filtramos los datos que le corresponden
                 if(tt>h_seg_inicial && tt<=h_seg_final)
                     dataList.add(new Data_struct(data[1],data[3],data[4]));
+                
+                printDataList(dataList);
 
             }
 
@@ -149,5 +151,13 @@ class Cliente50{
                 //System.out.println("parseTime -> "+parseTime[0]+":"+parseTime[1]+":"+parseTime[2]);
 		return (Integer.valueOf(parseTime[0])*3600 + Integer.valueOf(parseTime[1])*60 + Integer.valueOf(parseTime[2]));
 	}
+        
+        public void printDataList(ArrayList<Data_struct> data){
+            if(data.size()>0)
+                System.out.println("Hora\tParadero_I\tParadero_F");
+            data.stream().forEach((item) -> {
+                System.out.println(""+item.getTiempo_str()+"\t"+item.getParada_I()+"\t"+item.getParada_F());
+        });
+        }
 
 }
