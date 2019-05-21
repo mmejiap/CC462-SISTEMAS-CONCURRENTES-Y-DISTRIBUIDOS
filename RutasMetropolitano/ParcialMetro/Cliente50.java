@@ -101,16 +101,32 @@ class Cliente50{
 			@Override
 			public void run(){
 
-			int maxPersonasPermitidas=200;
-			int[][] matrizNS = MatrizNorteToSur(matrix);
-			//printMatrix(matrix);
-			int personasMin = cantMinPersonasEnParadero(matrix);
-			System.out.println("\n\nSimulando Prueba\n");
+				int maxPersonasPermitidas=200;
+				int[][] matrizNS = MatrizNorteToSur(matrix);
+				//printMatrix(matrix);
+				int personasMin = cantMinPersonasEnParadero(matrix);
+				System.out.println("\n\nSimulando Prueba\n");
 			
-			System.out.println("\nImprimiendo Matriz N -> S");
-			//printMatrix(matrizNS);
-			
-			}	
+				System.out.println("\nImprimiendo Matriz N -> S");
+				//printMatrix(matrizNS);
+
+				int numRuta=0;
+
+				Grafo gNS = new Grafo(matrixPesos(matrizNS),paraderos_sort);
+
+				
+	
+				for(int i=0;i<paraderos_sort.length;i++){
+					for(int j=i+1;j<paraderos_sort.length;j++){
+						if(gNS.encontrarRutaDijkstra(i,j)!=null){
+							if(gNS.encontrarRutaDijkstra(i,j).size()>2){
+								System.out.print("Ruta "+(numRuta++)+"::: "+paraderos_sort[i]+" -> "+paraderos_sort[j]+ "====> ");
+								gNS.printCamino(i,j);
+							}
+						}
+					}
+				}	
+			}
 		}
 
 	).start();
@@ -126,7 +142,7 @@ class Cliente50{
 						int[][] matrizSN = MatrizSurToNorte(matrix);
 
 						System.out.println("\nImprimiendo Matriz S -> N");
-						printMatrix(matrizSN);
+						//printMatrix(matrizSN);
 					}
 				
 				}
@@ -134,7 +150,15 @@ class Cliente50{
 		).start();
 
 	//}
+	//i
 	//
+	//
+	Arraylist<Integer> ruta;
+	CargarRutas r1 = new  CargarRutas(matrizNS,ruta);
+-
+	r1.start()
+
+
 
 	//printMatrix(matrizNS);
 	//printMatrix(matrizSN);
@@ -268,17 +292,23 @@ class Cliente50{
         
         public void printMatrix(int[][] m ){
             int dim = paraderos_sort.length;
-            /*
+            
             System.out.print(""+fixedLengthString("-",18));
-            System.out.print("\t");
+            System.out.print(" ->\t");
             for(int i=0; i<dim;i++){
                 
-                System.out.print(""+fixedLengthString(paraderos_sort[i],18));
+                //System.out.print(""+fixedLengthString(paraderos_sort[i],18)+"\t");                
+                System.out.print(""+fixedLengthString("- "+i,5)+"");
+
             }
-            */
+
+	    System.out.println();
+            
                     
             for(int i=0; i<dim; i++){
-                System.out.print(""+fixedLengthString(paraderos_sort[i],18)+"\t");
+		
+                //System.out.print(""+fixedLengthString(paraderos_sort[i],18)+"\t");
+                System.out.print(""+fixedLengthString(paraderos_sort[i],18)+" "+i+"->\t");
 
                 for(int j=0; j<dim;j++){
                     	//System.out.print(""+fixedLengthString(""+m[i][j]+ (j==dim-1?("\n"):("\t"))+"" , 3));
@@ -316,6 +346,20 @@ class Cliente50{
 					minVal=m[i][j];
 		//return minVal;
 		return 200;
+	}
+	
+	public int[][] matrixPesos(int[][] m){
+		int[][] r = new int[m.length][m.length];
+		for(int i=0;i<m.length;i++){
+			for(int j=0;j<m.length;j++){
+				float aux = (float) 10000.0/(float)m[i][j];
+				if(m[i][j]>0) r[i][j] = (int) aux;
+				else r[i][j]=0;
+
+					
+			}
+		}
+		return r;
 	}
         
     public static String fixedLengthString(String string, int length) {

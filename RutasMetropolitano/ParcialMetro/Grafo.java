@@ -27,7 +27,7 @@ public class Grafo{
 		encontrarRuta(inicio);
 		Nodo tmp = new Nodo(fin);
 		if(!listos.contains(tmp)){
-			System.out.println("Erro, nodo no alcanzable");
+			//System.out.println("Erro, nodo no alcanzable");
 			return null;
 		}
 		tmp=listos.get(listos.indexOf(tmp));
@@ -66,7 +66,7 @@ public class Grafo{
 					continue;
 				}
 				for(Nodo x:cola){
-					if(x.id==nod.id && x.peso<nod.peso){
+					if(x.id==nod.id && x.peso>nod.peso){
 						cola.remove(x);
 						cola.add(nod);
 						break;
