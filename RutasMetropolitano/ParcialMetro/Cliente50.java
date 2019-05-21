@@ -70,8 +70,18 @@ class Cliente50{
         //int hF_seg = timeStringToSegundos(hora[1]);
         //String csvFile = "04_05_2018.csv";
         //String csvFile = "src\\data\\04_05_2018.csv";
-	String csvFile = "./data/04_05_2018.csv";
+	//
+	String[] nameFile = {"04_05_2018.csv","04_05_2018.csv","04_05_2018.csv","04_05_2018.csv","04_05_2018.csv","04_05_2018.csv","04_05_2018.csv","04_05_2018.csv"};
+	
+	for(int ii=0;ii<nameFile.length;ii++){
+	//String csvFile = "./data/04_05_2018.csv";
+	String csvFile = "./data/"+nameFile[ii];
 
+	new Thread(
+	
+	new Runnable(){
+	@Override
+	public void run(){
         //String line = "";
         String SplitBy = ";";
         
@@ -121,12 +131,16 @@ class Cliente50{
 					for(int j=i+1;j<paraderos_sort.length;j++){
 						if(gNS.encontrarRutaDijkstra(i,j)!=null){
 							if(gNS.encontrarRutaDijkstra(i,j).size()>2){
-								System.out.print("Ruta "+(numRuta++)+"::: "+paraderos_sort[i]+" -> "+paraderos_sort[j]+ "====> ");
+								System.out.print("Ruta (N->S) "+(numRuta++)+"::: "+paraderos_sort[i]+" -> "+paraderos_sort[j]+ "====> ");
 								gNS.printCamino(i,j);
 							}
 						}
 					}
-				}	
+				}
+
+
+
+				
 			}
 		}
 
@@ -144,6 +158,38 @@ class Cliente50{
 
 						System.out.println("\nImprimiendo Matriz S -> N");
 						//printMatrix(matrizSN);
+						//
+
+		                                int maxPersonasPermitidas=200;
+        		                        int[][] matrizNS = MatrizNorteToSur(matrix);
+                		                //printMatrix(matrix);
+                        		        int personasMin = cantMinPersonasEnParadero(matrix);
+                                		System.out.println("\n\nSimulando Prueba\n");
+
+		                                System.out.println("\nImprimiendo Matriz N -> S");
+                		                //printMatrix(matrizNS);
+
+		                                int numRuta=0;
+
+                                //Grafo gNS = new Grafo(matrixPesos(matrizNS),paraderos_sort);
+                                Grafo gNS = new Grafo(matrizNS,paraderos_sort);
+
+
+
+                                for(int i=0;i<paraderos_sort.length;i++){
+                                        for(int j=i+1;j<paraderos_sort.length;j++){
+                                                if(gNS.encontrarRutaDijkstra(i,j)!=null){
+                                                        if(gNS.encontrarRutaDijkstra(i,j).size()>2){
+                                                                System.out.print("Ruta (N->S) "+(numRuta++)+"::: "+paraderos_sort[i]+" -> "+paraderos_sort[j]+ "====> ");
+                                                                gNS.printCamino(i,j);
+                                                        }
+                                                }
+                                        }
+                                }
+
+
+
+
 					}
 				
 				}
@@ -165,8 +211,12 @@ class Cliente50{
 
 	//printMatrix(matrizNS);
 	//printMatrix(matrizSN);
+	}
+	}//fin de Thread
 	
-
+	).start();
+	
+	} //fin for
 
     }
 
