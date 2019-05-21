@@ -112,7 +112,8 @@ class Cliente50{
 
 				int numRuta=0;
 
-				Grafo gNS = new Grafo(matrixPesos(matrizNS),paraderos_sort);
+				//Grafo gNS = new Grafo(matrixPesos(matrizNS),paraderos_sort);
+				Grafo gNS = new Grafo(matrizNS,paraderos_sort);
 
 				
 	
@@ -153,10 +154,12 @@ class Cliente50{
 	//i
 	//
 	//
+	/*
 	Arraylist<Integer> ruta;
 	CargarRutas r1 = new  CargarRutas(matrizNS,ruta);
 -
-	r1.start()
+	r1.start();
+	*/
 
 
 

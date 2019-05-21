@@ -66,7 +66,7 @@ public class Grafo{
 					continue;
 				}
 				for(Nodo x:cola){
-					if(x.id==nod.id && x.peso>nod.peso){
+					if(x.id==nod.id && x.peso<nod.peso){
 						cola.remove(x);
 						cola.add(nod);
 						break;
