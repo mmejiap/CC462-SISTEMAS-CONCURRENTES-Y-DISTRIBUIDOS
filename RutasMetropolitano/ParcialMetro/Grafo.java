@@ -82,6 +82,19 @@ public class Grafo{
 		return listos.contains(tmp);
 	}
 
+	public int pesoCamino(int inicio, int fin){
+		int p = 0;
+		ArrayList<Integer> ruta = encontrarRutaDijkstra(inicio, fin);
+
+		for(int i=0; i<ruta.size()-1;i++){
+			p += matrizAdy[ruta.get(0)][ruta.get(1)];
+		}
+		
+		return p;
+	}
+
+	
+
 
 
 	public void printMatrizAdy(){

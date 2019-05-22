@@ -71,7 +71,7 @@ class Cliente50{
         //String csvFile = "04_05_2018.csv";
         //String csvFile = "src\\data\\04_05_2018.csv";
 	//
-	String[] nameFile = {"04_05_2018.csv","04_05_2018.csv","04_05_2018.csv","04_05_2018.csv","04_05_2018.csv","04_05_2018.csv","04_05_2018.csv","04_05_2018.csv"};
+	String[] nameFile = {"04_05_2018.csv"};//,"04_05_2018.csv","04_05_2018.csv","04_05_2018.csv","04_05_2018.csv","04_05_2018.csv","04_05_2018.csv","04_05_2018.csv"};
 	
 	for(int ii=0;ii<nameFile.length;ii++){
 	//String csvFile = "./data/04_05_2018.csv";
@@ -125,20 +125,68 @@ class Cliente50{
 				//Grafo gNS = new Grafo(matrixPesos(matrizNS),paraderos_sort);
 				Grafo gNS = new Grafo(matrizNS,paraderos_sort);
 
-				
+				int[][] pesoRutas = new int[1160][2];
+
+				ArrayList<ArrayList<Integer>> rutasTotales = new ArrayList<ArrayList<Integer>>();
 	
 				for(int i=0;i<paraderos_sort.length;i++){
 					for(int j=i+1;j<paraderos_sort.length;j++){
 						if(gNS.encontrarRutaDijkstra(i,j)!=null){
 							if(gNS.encontrarRutaDijkstra(i,j).size()>2){
+
 								System.out.print("Ruta (N->S) "+(numRuta++)+"::: "+paraderos_sort[i]+" -> "+paraderos_sort[j]+ "====> ");
+								
+								rutasTotales.add( gNS.encontrarRutaDijkstra(i,j) );
+								pesoRutas[numRuta][0]=numRuta;
+								pesoRutas[numRuta][1]=gNS.pesoCamino(i,j);
 								gNS.printCamino(i,j);
 							}
 						}
 					}
+				
 				}
 
+				//buscando los rutas mas utiles
 
+				sortbyColumn(pesoRutas,1);
+
+				
+
+				/*for(int a=0; a<pesoRutas.length;a++){
+					//for(int b=0; b<pesoRutas[a].length;b++)
+						System.out.println("---------------->>>>>>>>>>>> index="+pesoRutas[a][0]+"valor: "+pesoRutas[a][1]);
+				}
+				*/
+
+				/*
+				int dd=0;
+				int cantUltimo=5;
+				if(cantUltimo>=pesoRutas.length)
+                                	cantUltimo=pesoRutas.length-1;
+				while(dd<cantUltimo){
+					
+
+					System.out.println("pesoRutas -> "+pesoRutas[1].length);
+
+				//if(dd==0) { continue;}
+					
+					System.out.println("----->>>>>>> ddddd "+dd);
+					ArrayList<Integer> cam = rutasTotales.get(rutasTotales.size()-dd-1);
+					
+					for(int ee=0;ee<cam.size();ee++){
+
+						System.out.print("Ruta (N->S) "+(numRuta++)+"::: "+paraderos_sort[cam.get(0)]+" -> "+paraderos_sort[cam.size()-1]+ "====> ");		
+						gNS.printCamino(cam.get(0),cam.get(cam.size()-1));						
+					}
+					
+					dd++;
+					
+				
+				}
+				*/
+
+
+				
 
 				
 			}
@@ -161,18 +209,18 @@ class Cliente50{
 						//
 
 		                                int maxPersonasPermitidas=200;
-        		                        int[][] matrizNS = MatrizNorteToSur(matrix);
+        		                        //int[][] matrizSN = MatrizSurToNorte(matrix);
                 		                //printMatrix(matrix);
                         		        int personasMin = cantMinPersonasEnParadero(matrix);
                                 		System.out.println("\n\nSimulando Prueba\n");
 
-		                                System.out.println("\nImprimiendo Matriz N -> S");
+						//System.out.println("\nImprimiendo Matriz N -> S");
                 		                //printMatrix(matrizNS);
 
 		                                int numRuta=0;
 
                                 //Grafo gNS = new Grafo(matrixPesos(matrizNS),paraderos_sort);
-                                Grafo gNS = new Grafo(matrizNS,paraderos_sort);
+                                Grafo gNS = new Grafo(matrizSN,paraderos_sort);
 
 
 
@@ -180,12 +228,14 @@ class Cliente50{
                                         for(int j=i+1;j<paraderos_sort.length;j++){
                                                 if(gNS.encontrarRutaDijkstra(i,j)!=null){
                                                         if(gNS.encontrarRutaDijkstra(i,j).size()>2){
-                                                                System.out.print("Ruta (N->S) "+(numRuta++)+"::: "+paraderos_sort[i]+" -> "+paraderos_sort[j]+ "====> ");
+                                                                System.out.print("Ruta (S->N) "+(numRuta++)+"::: "+paraderos_sort[i]+" -> "+paraderos_sort[j]+ "====> ");
                                                                 gNS.printCamino(i,j);
                                                         }
                                                 }
                                         }
                                 }
+
+
 
 
 
@@ -414,6 +464,25 @@ class Cliente50{
 		}
 		return r;
 	}
+
+	public static void sortbyColumn(int arr[][], int col){
+        	// Using built-in sort function Arrays.sort
+	        Arrays.sort(arr, new Comparator<int[]>() {
+
+          	@Override
+	          // Compare values according to columns
+          public int compare(final int[] entry1,
+                             final int[] entry2) {
+
+            // To sort in descending order revert
+            // the '>' Operator
+            if (entry1[col] > entry2[col])
+                return 1;
+            else
+                return -1;
+          }
+        });  // End of function call sort().
+    }
         
     public static String fixedLengthString(String string, int length) {
        return String.format("%1$"+length+ "s", string);
